@@ -10,6 +10,11 @@ class Concert extends Model
 
     protected $dates = ['date'];
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     public function scopePublished($query)
     {
         return $query->whereNotNull('published_at');
@@ -28,5 +33,17 @@ class Concert extends Model
     public function getTicketPriceInDollarsAttribute()
     {
         return number_format($this->ticket_price / 100, 2);
+    }
+
+    public function orderTickets($email, $ticketQuantity)
+    {
+        $order = $this->orders()->create(['email' => $email]);
+
+        foreach (range(1, $ticketQuantity)as $i)
+        {
+            $order->tickets()->create([]);
+        }
+
+        return $order;
     }
 }

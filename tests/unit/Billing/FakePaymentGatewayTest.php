@@ -1,5 +1,6 @@
 <?php
 
+use App\Billing\PaymentFailedException;
 use App\Billing\FakePaymentGateway;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -17,5 +18,19 @@ class FakePaymentGatewayTest extends TestCase
         $this->assertEquals(2500, $paymentGateway->totalCharges());
     }
 
+    /** @test */
+    function charges_with_an_invalid_payment_token_fail()
+    {
+        try{
+            $paymentGateway = new FakePaymentGateway;
+
+            $paymentGateway->charge(2500, 'invalid-payment-token');
+        } catch (PaymentFailedException $e){
+            return;
+        }
+
+        $this->fail();
+
+    }
 }
 

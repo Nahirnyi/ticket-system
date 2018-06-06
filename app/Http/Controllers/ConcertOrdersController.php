@@ -18,13 +18,13 @@ class ConcertOrdersController extends Controller
 
     public function store($concertId)
     {
+        $concert = Concert::published()->findOrFail($concertId);
         $this->validate(request(),[
            'email' => ['required', 'email'],
             'ticket_quantity' => ['required', 'integer', 'min:1'],
             'payment_token' => ['required'],
         ]);
         try{
-            $concert = Concert::find($concertId);
             $ticketQuantity = request('ticket_quantity');
             $amount = $ticketQuantity * $concert->ticket_price;
             $token = request('payment_token');

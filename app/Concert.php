@@ -50,7 +50,10 @@ class Concert extends Model
             throw new NotEnoughTicketsExaption;
         }
 
-        $order = $this->orders()->create(['email' => $email]);
+        $order = $this->orders()->create([
+            'email' => $email,
+            'amount' => $ticketQuantity * $this->ticket_price,
+        ]);
 
         foreach ($tickets as $ticket)
         {

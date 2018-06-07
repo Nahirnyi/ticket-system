@@ -28,20 +28,20 @@ class ReservationTest extends TestCase
     /** @test */
     function reserved_tickets_are_relased_when_a_reservation_is_cancelled()
     {
-        $ticket1 = Mockery::mock(\App\Ticket::class);
-        $ticket1->shouldReceive('release')->once();
-
-        $ticket2 = Mockery::mock(\App\Ticket::class);
-        $ticket2->shouldReceive('release')->once();
-
-        $ticket3 = Mockery::mock(\App\Ticket::class);
-        $ticket3->shouldReceive('release')->once();
-
-        $tickets = collect([$ticket1, $ticket2, $ticket3]);
+        $tickets = collect([
+            Mockery::spy(\App\Ticket::class),
+            Mockery::spy(\App\Ticket::class),
+            Mockery::spy(\App\Ticket::class),
+        ]);
 
         $reservation = new Reservation($tickets);
 
         $reservation->cancel();
+
+        foreach ($tickets as $ticket)
+        {
+            $ticket->shouldReceive('release');
+        }
 
     }
 }

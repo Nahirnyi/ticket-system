@@ -27,23 +27,16 @@ class ConcertOrdersController extends Controller
         ]);
 
         try {
-            $order = $concert->orderTickets(request('email'), request('ticket_quantity'));
+            $tickets = $concert->findTickets(request('ticket_quantity'));
+            $this->paymentGateway->charge(request('ticket_quantity') * $concert->ticket_price, request('payment_token'));
 
-            $ticketQuantity = request('ticket_quantity');
-            $amount = $ticketQuantity * $concert->ticket_price;
-            $token = request('payment_token');
-            $this->paymentGateway->charge($amount, $token);
+            $order = $concert->createOrder(request('email'), $tickets);
 
 
-            return response()->json([
-                'email' => $order->email,
-                'ticket_quantity' => $ticketQuantity,
-                'amount' => $amount,
-            ], 201);
+            return response()->json($order, 201);
 
         } catch (PaymentFailedException $e)
         {
-            $order->cancel();
             return response()->json([], 422);
         } catch (NotEnoughTicketsExaption $e)
         {

@@ -27,8 +27,12 @@ class ViewOrderTest extends TestCase
             'order_id' => $order->id
         ]);
 
-        $response = $this->get("/order/ORDERCONFIRMATION1234");
+        $response = $this->get("/orders/ORDERCONFIRMATION1234");
 
         $response->assertStatus(200);
+
+        $response->assertViewHas('order', function ($viewOrder) use ($order){
+            return $order->id === $viewOrder->id;
+        });
     }
 }

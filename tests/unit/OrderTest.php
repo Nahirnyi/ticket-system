@@ -31,6 +31,29 @@ class OrderTest extends  TestCase
     }
 
     /** @test */
+    function retrieving_an_order_by_confirmation_number()
+    {
+        $order = factory(Order::class)->create([
+            'confirmation_number' => 'ORDERCONFIRMATION1234',
+        ]);
+
+        $foundOrder = Order::findByConfirmationNumber('ORDERCONFIRMATION1234');
+        $this->assertEquals($order->id, $foundOrder->id);
+    }
+
+    /** @test */
+    function retrieving_a_nonexistent_order_by_confirmation_number_throws_an_exception()
+    {
+        try {
+            Order::findByConfirmationNumber('ORDERCONFIRMATION1234');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return;
+        }
+
+        $this->fail('No matching order was found');
+    }
+
+    /** @test */
     function converting_to_an_array()
     {
         $concert = factory(Concert::class)->create(['ticket_price'=> 1200]);

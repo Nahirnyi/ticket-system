@@ -20,7 +20,7 @@ class ViewOrderTest extends TestCase
     {
         $concert = factory(Concert::class)->create();
         $order = factory(Order::class)->create([
-            'confirmation_test' => 'ORDERCONFIRMATION1234'
+            'confirmation_number' => 'ORDERCONFIRMATION1234'
         ]);
         $ticket = factory(Ticket::class)->create([
             'concert_id' => $concert->id,

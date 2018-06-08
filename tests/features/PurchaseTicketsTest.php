@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class PurchaseTicketsTest extends BrowserKitTestCase
+class PurchaseTicketsTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -95,7 +95,24 @@ class PurchaseTicketsTest extends BrowserKitTestCase
 
     private function orderTickets($concert, $params)
     {
-        $this->json('POST', "/concerts/{$concert->id}/orders", $params);
+        $saveRequest = $this->app['request'];
+        $this->response = $this->json('POST', "/concerts/{$concert->id}/orders", $params);
+        $this->app['request'] = $saveRequest;
+    }
+
+    private function assertResponseStatus($status)
+    {
+        $this->response->assertStatus($status);
+    }
+
+    private function decodeResponseJson()
+    {
+        return $this->response->decodeResponseJson();
+    }
+
+    private function seeJsonSubset($data)
+    {
+        $this->response->assertJson($data);
     }
 
     private function assertValidationError($field)

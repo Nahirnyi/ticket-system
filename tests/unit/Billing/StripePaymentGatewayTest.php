@@ -9,12 +9,28 @@
 use App\Billing\StripePaymentGateway;
 class StripePaymentGatewayTest extends TestCase
 {
-    /** @test */
-    function charges_with_a_valid_payment_token_are_successful()
+    private function lastCharge()
     {
-        $paymentGateway = new StripePaymentGateway(config('services.stripe.secret'));
+        return \Stripe\Charge::all(
+            ['limit' => 1],
+            ['api_key' => config('services.stripe.secret')]
+        )['data'][0];
+    }
 
-        $token = \Stripe\Token::create([
+    private function newCharges()
+    {
+        return \Stripe\Charge::all(
+            [
+                'limit' => 1,
+                'ending_before' => $this->lastCharge->id,
+            ],
+            ['api_key' => config('services.stripe.secret')]
+        )['data'];
+    }
+
+    private function validToken()
+    {
+        return \Stripe\Token::create([
             "card" => [
                 "number" => "4242424242424242",
                 "exp_month" => 1,
@@ -22,14 +38,23 @@ class StripePaymentGatewayTest extends TestCase
                 "cvc" => "123"
             ]
         ], ['api_key' => config('services.stripe.secret')])->id;
+    }
 
-        $paymentGateway->charge(2500, $token);
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->lastCharge = $this->lastCharge();
+    }
 
-        $lastCharge = \Stripe\Charge::all(
-            ['limit' => 1],
-            ['api_key' => config('services.stripe.secret')]
-        )['data'][0];
+    /** @test */
+    function charges_with_a_valid_payment_token_are_successful()
+    {
 
-        $this->assertEquals(2500, $lastCharge->amount);
+        $paymentGateway = new StripePaymentGateway(config('services.stripe.secret'));
+
+        $paymentGateway->charge(2500, $this->validToken());
+
+        $this->assertCount(1, $this->newCharges());
+        $this->assertEquals(2500, $this->lastCharge()->amount);
     }
 }

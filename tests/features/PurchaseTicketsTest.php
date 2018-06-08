@@ -97,6 +97,7 @@ class PurchaseTicketsTest extends TestCase
     {
         $saveRequest = $this->app['request'];
         $this->response = $this->json('POST', "/concerts/{$concert->id}/orders", $params);
+
         $this->app['request'] = $saveRequest;
     }
 

@@ -33,18 +33,6 @@ class Order extends Model
         return $this->belongsTo(Concert::class);
     }
 
-    public static function fromReservation($reservation)
-    {
-        $order = self::create([
-            'email' => $reservation->email(),
-            'amount' => $reservation->totalCost(),
-        ]);
-
-        $order->tickets()->saveMany($reservation->tickets());
-
-        return $order;
-    }
-
     public function ticketQuantity()
     {
         return $this->tickets()->count();

@@ -6,7 +6,9 @@
  * Time: 10:51 AM
  */
 
+use App\Order;
 use App\Ticket;
+use App\Facades\TicketCode;
 
 class TicketTest extends TestCase
 {
@@ -32,5 +34,18 @@ class TicketTest extends TestCase
         $ticket->release();
 
         $this->assertNull($ticket->fresh()->reserved_at);
+    }
+
+    /** @test */
+    function a_ticket_can_be_claimed_for_an_order()
+    {
+        $order = factory(Order::class)->create();
+        $ticket = factory(Ticket::class)->create(['code' => null]);
+        TicketCode::shouldReceive('generate')->andReturn('TICKETCODE1');
+        $this->assertNull($ticket->code);
+        $ticket->claimFor($order);
+
+        $this->assertContains($ticket->id, $order->tickets->pluck('id'));
+        $this->assertEquals('TICKETCODE1', $ticket->code);
     }
 }

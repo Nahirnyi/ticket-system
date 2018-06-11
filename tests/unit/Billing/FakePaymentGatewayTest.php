@@ -15,20 +15,6 @@ class FakePaymentGatewayTest extends TestCase
     }
 
     /** @test */
-    function charges_with_a_valid_payment_token_are_successful()
-    {
-        $paymentGateway = $this->getPaymentGateway();
-
-        $newCharges = $paymentGateway->newChargesDuring(function ($paymentGateway) {
-            $paymentGateway->charge(2500, $paymentGateway->getValidTestToken());
-        });
-
-
-        $this->assertCount(1, $newCharges);
-        $this->assertEquals(2500, $newCharges->sum());
-    }
-
-    /** @test */
     function running_a_hook_before_the_first_charge()
     {
         $paymentGateway = new FakePaymentGateway;

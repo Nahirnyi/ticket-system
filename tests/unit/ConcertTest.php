@@ -54,19 +54,6 @@ class ConcertTest extends TestCase
         $this->assertTrue($publishedConcerts->contains($publishedConcertB));
         $this->assertFalse($publishedConcerts->contains($unPublishedConcert));
     }
-
-    /** @test */
-    function can_order_concert_tickets()
-    {
-        $concert = factory(Concert::class)->create();
-        $concert->addTickets(3);
-
-        $order = $concert->orderTickets('john@example.com', 3);
-
-        $this->assertEquals('john@example.com', $order->email);
-        $this->assertEquals(3, $order->tickets()->count());
-    }
-
     /** @test */
     function can_add_tickets()
     {
@@ -81,20 +68,20 @@ class ConcertTest extends TestCase
     {
         $concert = factory(Concert::class)->create();
 
-        $concert->addTickets(50);
-        $concert->orderTickets('john@example.com', 30);
+        $concert->tivkets()->saveMany(factory(\App\Ticket::class, 30)->create(['order_id' => 1]));
+        $concert->tivkets()->saveMany(factory(\App\Ticket::class, 20)->create(['order_id' => null]));
 
         $this->assertEquals(20, $concert->ticketsRemaining());
     }
 
     /** @test */
-    function trying_to_purchase_more_tickets_than_remain_throws_an_exception()
+    function trying_to_reserve_more_tickets_than_remain_throws_an_exception()
     {
         $concert = factory(Concert::class)->create();
         $concert->addTickets(10);
 
         try {
-            $concert->orderTickets('john@example.com', 11);
+            $reservation = $concert->reserveTickets(11, 'john@example.com');
         } catch (NotEnoughTicketsExaption $e) {
             $order = $concert->orders()->where('email', 'john@example.com')->first();
             $this->assertNull($order);
@@ -110,10 +97,11 @@ class ConcertTest extends TestCase
     {
         $concert = factory(Concert::class)->create();
         $concert->addTickets(10);
-        $concert->orderTickets('jane@example.com', 8);
+        $order = factory(\App\Order::class)->create();
+        $order->tickets()->saveMany($concert->tickets->take(8));
 
         try {
-            $concert->orderTickets('john@example.com', 3);
+            $concert->reserveTickets(3, 'john@example.com');
         } catch (NotEnoughTicketsExaption $e) {
             $johnOrder = $concert->orders()->where('email', 'john@example.com')->first();
             $this->assertNull($johnOrder);
@@ -143,7 +131,8 @@ class ConcertTest extends TestCase
     {
         $concert = factory(Concert::class)->create();
         $concert->addTickets(3);
-        $concert->orderTickets('jane@example.com', 2);
+        $order = factory(\App\Order::class)->create();
+        $order->tickets()->saveMany($concert->tickets->take(2));
 
         try {
             $concert->reserveTickets(2, 'jane@example.com');

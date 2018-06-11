@@ -68,6 +68,8 @@ $factory->state(App\Ticket::class, 'reserved', function ($faker){
 $factory->define(App\Order::class, function (FAker\Generator $faker){
     return [
         'amount' => 5250,
-        'email' => "somebody@exa,ple.com",
+        'email' => 'somebody@example.com',
+        'confirmation_number' => 'ORDERCONFIRMATION123',
+        'card_last_four' => '1234',
     ];
 });

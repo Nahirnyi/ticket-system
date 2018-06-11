@@ -18,6 +18,7 @@ class CreateOrdersTable extends Migration
             $table->integer('amount');
             $table->string('email');
             $table->string('confirmation_number');
+            $table->string('card_last_four');
             $table->timestamps();
         });
     }

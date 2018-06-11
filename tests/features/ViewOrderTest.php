@@ -48,6 +48,5 @@ class ViewOrderTest extends TestCase
         $response->assertSee('**** **** **** 1881');
         $response->assertSee('TICKETCODE123');
         $response->assertSee('TICKETCODE456');
-
     }
 }

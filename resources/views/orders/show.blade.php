@@ -3,4 +3,6 @@
 <p>**** **** **** {{ $order->card_last_four }}</p>
 @foreach($order->tickets as $ticket)
     <p>{{ $ticket->code }}</p>
+    <p>{{$ticket->concert->date->format('l, F j, Y')}}</p>
+    <p>{{ $ticket->concert->date->format('g:ia') }}</p>
 @endforeach

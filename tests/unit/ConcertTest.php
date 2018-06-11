@@ -3,9 +3,7 @@ use App\Concert;
 use Carbon\Carbon;
 use App\Exceptions\NotEnoughTicketsExaption;
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ConcertTest extends TestCase
 {
@@ -81,7 +79,7 @@ class ConcertTest extends TestCase
         $concert->addTickets(10);
 
         try {
-            $reservation = $concert->reserveTickets(11, 'john@example.com');
+            $concert->reserveTickets(11, 'john@example.com');
         } catch (NotEnoughTicketsExaption $e) {
             $order = $concert->orders()->where('email', 'john@example.com')->first();
             $this->assertNull($order);

@@ -1,11 +1,12 @@
 <?php
+
 use App\Concert;
 use App\Billing\PaymentGateway;
 use App\Billing\FakePaymentGateway;
+
 use App\OrderConfirmationNumberGenerator;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+
 
 class PurchaseTicketsTest extends TestCase
 {
@@ -17,43 +18,6 @@ class PurchaseTicketsTest extends TestCase
         $this->paymentGateway = new FakePaymentGateway;
         $this->app->instance(PaymentGateway::class, $this->paymentGateway);
     }
-
-    /** @test */
-    /*function customer_can_purchase_tickets_to_a_published_concert()
-    {
-
-        $orderConfirmationNumberGenerator = Mockery::mock(OrderConfirmationNumberGenerator::class, [
-            'generte' => 'ORDERCONFIRMATION1234',
-        ]);
-
-        $this->app->instance(OrderConfirmationNumberGenerator::class, $orderConfirmationNumberGenerator);
-
-        $concert = factory(Concert::class)->states('published')->create(['ticket_price' => 3250]);
-
-        $concert->addTickets(3);
-
-        $this->orderTickets($concert, [
-            'email' => 'john@example.com',
-            'ticket_quantity' => 3,
-            'payment_token' => $this->paymentGateway->getValidTestToken(),
-        ]);
-        $this->assertResponseStatus(201);
-
-        $this->seeJsonSubset([
-            'confirmation_number' => 'ORDERCONFIRMATION1234',
-            'email' => 'john@example.com',
-            'ticket_quantity' => 3,
-            'amount' => 9750,
-        ]);
-
-        $this->assertEquals(9750, $this->paymentGateway->totalCharges());
-
-        $order = $concert->orders()->where('email', 'john@example.com')->first();
-
-        $this->assertNotNull($order);
-
-        $this->assertEquals(3, $order->tickets()->count());
-    }*/
 
     /** @test */
     function email_is_required_to_purchase_tickets()
@@ -146,6 +110,36 @@ class PurchaseTicketsTest extends TestCase
         $this->assertResponseStatus(422);
         $order = $concert->orders()->where('email', 'john@example.com')->first();
         $this->assertEquals(3, $concert->ticketsRemaining());
+    }
+
+    /** @test */
+    function customer_can_purchase_tickets_to_a_published_concert()
+    {
+        \App\Facades\OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
+        $concert = factory(Concert::class)->states('published')->create([
+            'ticket_price' => 3250
+        ]);
+        $concert->addTickets(3);
+        $this->orderTickets($concert, [
+            'email' => 'john@example.com',
+            'ticket_quantity' => 3,
+            'payment_token' => $this->paymentGateway->getValidTestToken(),
+        ]);
+
+        $this->assertResponseStatus(201);
+        $this->seeJsonSubset([
+            'confirmation_number' => 'ORDERCONFIRMATION1234',
+            'email' => 'john@example.com',
+            'ticket_quantity' => 3,
+            'amount' => 9750,
+            'tickets' => [
+              ['code' => 'TICKETCODE1'],
+              ['code' => 'TICKETCODE2'],
+              ['code' => 'TICKETCODE3'],
+            ],
+        ]);
+        $this->assertEquals(3, $concert->orders()->count());
+        $this->assertEquals(9750, $this->paymentGateway->totalCharges());
     }
 
     /** @test */

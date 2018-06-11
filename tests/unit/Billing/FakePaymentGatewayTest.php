@@ -1,9 +1,7 @@
 <?php
 
-use App\Billing\PaymentFailedException;
 use App\Billing\FakePaymentGateway;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+
 
 class FakePaymentGatewayTest extends TestCase
 {

@@ -9,8 +9,6 @@
 namespace App\Billing;
 
 
-use Stripe\Charge;
-
 class FakePaymentGateway implements PaymentGateway
 {
     const TEST_CARD_NUMBER = '4242424242424242';

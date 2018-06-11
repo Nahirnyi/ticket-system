@@ -25,7 +25,7 @@ class RandomOrderConfirmationNumberGeneratorTest extends TestCase
         $generator =  new RandomOrderConfirmationNumberGenerator;
         $confirmationNumber = $generator->generate();
 
-        $this->assertRegExp('/^[A-Z0_9]+$/', $confirmationNumber);
+        $this->assertRegExp('/^[A-Z0-9]+$/', $confirmationNumber);
     }
 
     /** @test */

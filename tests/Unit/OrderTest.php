@@ -7,10 +7,11 @@
  */
 namespace Tests\Unit;
 
+use App\{
+    Billing\Charge, Ticket, Order
+};
 use Mockery;
 use Tests\TestCase;
-use App\Ticket;
-use App\Order;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class OrderTest extends  TestCase
@@ -20,7 +21,7 @@ class OrderTest extends  TestCase
     /** @test */
     function creating_an_order_from_tickets_email_and_amount()
     {
-        $charge = new \App\Billing\Charge([
+        $charge = new Charge([
             'amount' => 3600,
             'card_last_four' => '1234'
         ]);
@@ -33,11 +34,10 @@ class OrderTest extends  TestCase
 
         $order = Order::forTickets($tickets, 'john@example.com', $charge);
 
-
         $this->assertEquals('john@example.com', $order->email);
         $this->assertEquals(3600, $order->amount);
         $this->assertEquals('1234', $order->card_last_four);
-        $tickets->each->shouldHavaReceive('claimFor', [$order]);
+        $tickets->each->shouldHaveReceive('claimFor', [$order]);
     }
 
     /** @test */

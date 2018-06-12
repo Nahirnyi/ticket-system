@@ -17,4 +17,15 @@ class LoginController extends Controller
         }
         return redirect('/backstage/concerts');
     }
+
+    public function loginForm()
+    {
+        return view('auth.login');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/login');
+    }
 }

@@ -12,6 +12,7 @@
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
+        "laravel/dusk": "^1.0",
         "mockery/mockery": "1.0.0-alpha1",
         "phpunit/phpunit": "~5.0",
         "symfony/css-selector": "3.1.*",
@@ -26,9 +27,9 @@
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests"
-        ]
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-root-package-install": [

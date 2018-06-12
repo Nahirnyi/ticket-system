@@ -1,10 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderConfirmationEmail;
 use App\Concert;
 use App\Billing\PaymentGateway;
 use App\Billing\FakePaymentGateway;
-
-use App\OrderConfirmationNumberGenerator;
+use App\Facades\TicketCode;
+use App\Facades\OrderConfirmationNumber;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 
@@ -115,11 +117,15 @@ class PurchaseTicketsTest extends TestCase
     /** @test */
     function customer_can_purchase_tickets_to_a_published_concert()
     {
-        \App\Facades\OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
+        Mail::fake();
+        OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
+        TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1', 'TICKETCODE2', 'TICKETCODE3');
+
         $concert = factory(Concert::class)->states('published')->create([
             'ticket_price' => 3250
         ]);
         $concert->addTickets(3);
+
         $this->orderTickets($concert, [
             'email' => 'john@example.com',
             'ticket_quantity' => 3,
@@ -127,10 +133,10 @@ class PurchaseTicketsTest extends TestCase
         ]);
 
         $this->assertResponseStatus(201);
+
         $this->seeJsonSubset([
             'confirmation_number' => 'ORDERCONFIRMATION1234',
             'email' => 'john@example.com',
-            'ticket_quantity' => 3,
             'amount' => 9750,
             'tickets' => [
               ['code' => 'TICKETCODE1'],
@@ -138,8 +144,13 @@ class PurchaseTicketsTest extends TestCase
               ['code' => 'TICKETCODE3'],
             ],
         ]);
+        $order = $concert->orders()->where('email', 'john@example.com')->first();
         $this->assertEquals(3, $concert->orders()->count());
         $this->assertEquals(9750, $this->paymentGateway->totalCharges());
+        Mail::assertSent(OrderConfirmationEmail::class, function ($mail) use ($order){
+            return $mail->hasTo('john@example.com')
+                && $mail->order->id == $order->id;
+        });
     }
 
     /** @test */

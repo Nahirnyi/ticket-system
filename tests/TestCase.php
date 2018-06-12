@@ -28,4 +28,14 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 
         return $app;
     }
+
+    protected function disableExceptionHandler()
+    {
+        app()->instance(\App\Exceptions\Handler::class, new class extends \App\Exceptions\Handler{
+            public function render($request, Exception $exception)
+            {
+                throw $exception;
+            }
+        });
+    }
 }

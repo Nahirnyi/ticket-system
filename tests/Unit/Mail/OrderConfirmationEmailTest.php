@@ -5,7 +5,9 @@
  * Date: 6/12/18
  * Time: 11:02 AM
  */
+namespace Tests\Unit\Mail;
 
+use Tests\TestCase;
 use App\Order;
 use App\Mail\OrderConfirmationEmail;
 

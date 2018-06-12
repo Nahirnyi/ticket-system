@@ -5,6 +5,7 @@
  * Date: 6/8/18
  * Time: 2:16 PM
  */
+namespace Tests\Unit\Billing;
 
 
 trait PaymentGatewayContractTests

@@ -5,7 +5,10 @@
  * Date: 6/7/18
  * Time: 10:11 AM
  */
+namespace Tests\Unit;
 
+use Mockery;
+use Tests\TestCase;
 use App\Ticket;
 use App\Order;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

@@ -1,5 +1,7 @@
 <?php
+namespace Tests\Feature;
 
+use Tests\TestCase;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderConfirmationEmail;
 use App\Concert;

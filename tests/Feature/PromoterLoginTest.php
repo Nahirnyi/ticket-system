@@ -6,6 +6,9 @@
  * Time: 11:33 AM
  */
 
+namespace Tests\Feature;
+
+use Tests\TestCase;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;

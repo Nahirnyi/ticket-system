@@ -5,7 +5,10 @@
  * Date: 6/7/18
  * Time: 1:58 PM
  */
+namespace Tests\Unit;
 
+use Mockery;
+use Tests\TestCase;
 use App\Reservation;
 use App\Concert;
 use App\Ticket;

@@ -1,4 +1,7 @@
 <?php
+namespace Tests\Unit;
+
+use Tests\TestCase;
 use App\Concert;
 use Carbon\Carbon;
 use App\Exceptions\NotEnoughTicketsExaption;

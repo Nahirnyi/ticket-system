@@ -5,7 +5,9 @@
  * Date: 6/8/18
  * Time: 4:04 PM
  */
+namespace Tests\Feature;
 
+use Tests\TestCase;
 use App\Order;
 use App\Concert;
 use App\Ticket;

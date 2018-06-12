@@ -5,7 +5,9 @@
  * Date: 6/11/18
  * Time: 11:13 AM
  */
+namespace Tests\Unit;
 
+use Tests\TestCase;
 use App\RandomOrderConfirmationNumberGenerator;
 
 class RandomOrderConfirmationNumberGeneratorTest extends TestCase

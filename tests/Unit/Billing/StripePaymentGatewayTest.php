@@ -5,7 +5,9 @@
  * Date: 6/8/18
  * Time: 9:47 AM
  */
+namespace Tests\Unit\Billing;
 
+use Tests\TestCase;
 use App\Billing\StripePaymentGateway;
 use App\Billing\PaymentFailedException;
 

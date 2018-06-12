@@ -5,7 +5,9 @@
  * Date: 6/7/18
  * Time: 10:51 AM
  */
+namespace Tests\Unit;
 
+use Tests\TestCase;
 use App\Order;
 use App\Ticket;
 use App\Facades\TicketCode;

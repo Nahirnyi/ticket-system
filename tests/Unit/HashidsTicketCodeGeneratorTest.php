@@ -5,7 +5,9 @@
  * Date: 6/11/18
  * Time: 5:26 PM
  */
+namespace Tests\Unit;
 
+use Tests\TestCase;
 class HashidsTicketCodeGeneratorTest extends TestCase
 {
     /** @test */

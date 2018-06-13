@@ -18,9 +18,10 @@ class ConcertsController extends Controller
         $this->validate(request(),[
             'title' => 'required'
         ]);
+
         $concert = Concert::create([
             'title' => request('title'),
-            'subtitle' => request('subtitle'),
+            'subtitle' => request('subtitle') === '' ? null : request('subtitle'),
             'date' => Carbon::parse(vsprintf('%s %s', [
                 request('date'),
                 request('time'),

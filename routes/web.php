@@ -27,8 +27,7 @@ Route::get('/login', 'Auth\LoginController@loginForm');
 Route::post('/logout', 'Auth\LoginController@logout');
 
 
-Route::group(['middleware' => 'auth', 'prefix' => 'backstage'], function (){
-    Route::get('concerts/new', 'Backstage\ConcertsController@create');
-    Route::post('concerts', 'Backstage\ConcertsController@store');
-
+Route::group(['middleware' => 'auth', 'prefix' => 'backstage', 'namespace' => 'Backstage'], function (){
+    Route::get('concerts/new', 'ConcertsController@create');
+    Route::post('concerts', 'ConcertsController@store');
 });

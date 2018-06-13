@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backstage;
 
 use App\Concert;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class ConcertsController extends Controller

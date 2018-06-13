@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use App\User;
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -26,6 +27,9 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Concert::class, function (FAker\Generator $faker){
    return [
+       'user_id' => function () {
+           return factory(User::class)->create()->id;
+       },
        'title' => 'The Red Chord',
        'subtitle' => 'with Animosity',
        'date' => Carbon::parse('+2 weeks'),

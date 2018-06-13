@@ -12,7 +12,7 @@ class PromoterLoginTest extends DuskTestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function logging_in_successfully()
+    public function logging_in_with_invalid_credetials()
     {
         $user = factory(User::class)->create([
             'email' => 'jane@example.com',
@@ -21,8 +21,6 @@ class PromoterLoginTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) {
             $browser->visit('/login')
-                ->type('email', 'jane@example.com')
-                ->type('password', 'wrong-password')
                 ->press('Log')
                 ->assertPathIs('/login');
         });

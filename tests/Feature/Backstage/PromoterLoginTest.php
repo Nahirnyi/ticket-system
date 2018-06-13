@@ -6,7 +6,7 @@
  * Time: 11:33 AM
  */
 
-namespace Tests\Feature;
+namespace Tests\Feature\Backstage;
 
 use Tests\TestCase;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +30,7 @@ class PromoterLoginTest extends TestCase
             'password' => 'super-secret-password',
         ]);
 
-        $response->assertRedirect('/backstage/concerts');
+        $response->assertRedirect('/backstage/concerts/new');
         $this->assertTrue(Auth::check());
         $this->assertTrue(Auth::user()->is($user));
     }
@@ -51,6 +51,8 @@ class PromoterLoginTest extends TestCase
         $response->assertRedirect('/login');
         $this->assertFalse(Auth::check());
         $response->assertSessionHasErrors('email');
+        $this->assertTrue(session()->hasOldInput(('email')));
+        $this->assertFalse(session()->hasOldInput(('password')));
     }
 
     /** @test */

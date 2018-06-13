@@ -16,12 +16,21 @@ class ConcertsController extends Controller
     public function store()
     {
         $this->validate(request(),[
-            'title' => 'required'
+            'title' => ['required'],
+            'date' => ['required', 'date'],
+            'time' => ['required', 'date_format:g:ia'],
+            'venue' => ['required'],
+            'venue_address' => ['required'],
+            'city' => ['required'],
+            'state' => ['required'],
+            'zip' => ['required'],
+            'ticket_price' => ['required', 'numeric', 'min:5'],
+            'ticket_quantity' => ['required', 'numeric', 'min:1'],
         ]);
 
         $concert = Concert::create([
             'title' => request('title'),
-            'subtitle' => request('subtitle') === '' ? null : request('subtitle'),
+            'subtitle' => request('subtitle'),
             'date' => Carbon::parse(vsprintf('%s %s', [
                 request('date'),
                 request('time'),

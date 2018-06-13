@@ -68,6 +68,10 @@ class ConcertsController extends Controller
     {
         $concert = Auth::user()->concerts()->findOrFail($id);
 
+        abort_if($concert->isPublished(), 403);
+        $this->validate(request(), [
+            'title' => ['required'],
+        ]);
         $concert->update([
             'title' => request('title'),
             'subtitle' => request('subtitle'),

@@ -69,9 +69,20 @@ class ConcertsController extends Controller
         $concert = Auth::user()->concerts()->findOrFail($id);
 
         abort_if($concert->isPublished(), 403);
+
         $this->validate(request(), [
             'title' => ['required'],
+            'date' => ['required', 'date'],
+            'time' => ['required', 'date_format:g:ia'],
+            'venue' => ['required'],
+            'venue_address' => ['required'],
+            'city' => ['required'],
+            'state' => ['required'],
+            'zip' => ['required'],
+            'ticket_price' => ['required', 'numeric', 'min:5'],
+            'ticket_quantity' => ['required', 'integer', 'min:1'],
         ]);
+
         $concert->update([
             'title' => request('title'),
             'subtitle' => request('subtitle'),
@@ -86,7 +97,9 @@ class ConcertsController extends Controller
             'state' => request('state'),
             'zip' => request('zip'),
             'ticket_price' => request('ticket_price') * 100,
+            'ticket_quantity' => request('ticket_quantity'),
         ]);
+
         return redirect()->route('backstage.concerts.index');
     }
 }

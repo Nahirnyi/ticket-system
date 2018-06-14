@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit;
 
+use App\Ticket;
 use Tests\TestCase;
 use App\Concert;
 use Carbon\Carbon;
@@ -88,10 +89,43 @@ class ConcertTest extends TestCase
     {
         $concert = factory(Concert::class)->create();
 
-        $concert->tivkets()->saveMany(factory(\App\Ticket::class, 30)->create(['order_id' => 1]));
-        $concert->tivkets()->saveMany(factory(\App\Ticket::class, 20)->create(['order_id' => null]));
+        $concert->tivkets()->saveMany(factory(\App\Ticket::class, 3)->create(['order_id' => 1]));
+        $concert->tivkets()->saveMany(factory(\App\Ticket::class, 2)->create(['order_id' => null]));
 
-        $this->assertEquals(20, $concert->ticketsRemaining());
+        $this->assertEquals(2, $concert->ticketsRemaining());
+    }
+
+    /**@test */
+    function tickets_sold_only_incluedes_tickets_assocciated_with_an_order()
+    {
+        $concert = factory(Concert::class)->create();
+
+        $concert->tivkets()->saveMany(factory(Ticket::class, 3)->create(['order_id' => 1]));
+        $concert->tivkets()->saveMany(factory(Ticket::class, 2)->create(['order_id' => null]));
+
+        $this->assertEquals(3, $concert->ticketsSold());
+    }
+
+    /**@test */
+    function total_tickets_includes_all_tickets()
+    {
+        $concert = factory(Concert::class)->create();
+
+        $concert->tivkets()->saveMany(factory(Ticket::class, 3)->create(['order_id' => 1]));
+        $concert->tivkets()->saveMany(factory(Ticket::class, 2)->create(['order_id' => null]));
+
+        $this->assertEquals(5, $concert->totalTickets());
+    }
+
+    /**@test */
+    function calculating_the_procent_tickets_sold()
+    {
+        $concert = factory(Concert::class)->create();
+
+        $concert->tivkets()->saveMany(factory(Ticket::class, 2)->create(['order_id' => 1]));
+        $concert->tivkets()->saveMany(factory(Ticket::class, 5)->create(['order_id' => null]));
+
+        $this->assertEquals(28.5714286, $concert->percentSoldOut());
     }
 
     /** @test */

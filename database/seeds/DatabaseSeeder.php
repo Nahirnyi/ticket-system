@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,5 +25,11 @@ class DatabaseSeeder extends Seeder
             'zip' => '17916',
             'additional_information' => 'For tickets, call (555) 555-5555',
         ])->addTickets(10);
+
+        DB::table('users')->insert([
+            'name' => str_random(10),
+            'email' => 'nahirnyi@gmail.com',
+            'password' => bcrypt('secret'),
+        ]);
     }
 }

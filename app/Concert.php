@@ -93,8 +93,23 @@ class Concert extends Model
         return $this->tickets()->available()->count();
     }
 
+    public function ticketsSold()
+    {
+        return $this->tickets()->whereNotNull('order_id')->count();
+    }
+
     public function ordersFor($customerEmail)
     {
         return $this->orders()->where('email', $customerEmail)->get();
+    }
+
+    public function totalTickets()
+    {
+        return $this->tickets()->count();
+    }
+
+    public function percentSoldOut()
+    {
+        return number_format(($this->ticketsSold() / $this->totalTickets()) * 100, 2);
     }
 }

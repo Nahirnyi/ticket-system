@@ -99,6 +99,7 @@ class AddConcerTest extends TestCase
             $this->assertEquals('12345', $concert->zip);
             $this->assertEquals(3250, $concert->ticket_price);
             $this->assertEquals(75, $concert->ticketsRemaining());
+            $this->assertEquals(75, $concert->ticket_quantity);
          });
 
     }

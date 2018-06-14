@@ -16,6 +16,11 @@ class Concert extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function attendeeMessage()
+    {
+        return $this->hasMany(AttendeeMessage::class);
+    }
+
     public function orders()
     {
         return $this->belongsToMany(Order::class, 'tickets');

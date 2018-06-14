@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Feature;
 
+use ConcertFactory;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderConfirmationEmail;
@@ -123,10 +124,10 @@ class PurchaseTicketsTest extends TestCase
         OrderConfirmationNumber::shouldReceive('generate')->andReturn('ORDERCONFIRMATION1234');
         TicketCode::shouldReceive('generateFor')->andReturn('TICKETCODE1', 'TICKETCODE2', 'TICKETCODE3');
 
-        $concert = factory(Concert::class)->states('published')->create([
-            'ticket_price' => 3250
+        $concert = ConcertFactory::createPublished([
+            'ticket_price' => 3250,
+            'ticket_quantity' => 3,
         ]);
-        $concert->addTickets(3);
 
         $this->orderTickets($concert, [
             'email' => 'john@example.com',

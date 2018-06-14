@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit;
 
+use App\Order;
 use App\Ticket;
 use Tests\TestCase;
 use App\Concert;
@@ -126,6 +127,19 @@ class ConcertTest extends TestCase
         $concert->tivkets()->saveMany(factory(Ticket::class, 5)->create(['order_id' => null]));
 
         $this->assertEquals(28.5714286, $concert->percentSoldOut());
+    }
+
+    /**@test */
+    function calculating_the_revenue_in_dollars()
+    {
+        $concert = factory(Concert::class)->create();
+        $orderA = factory(Order::class)->create(['amount' => 3850]);
+        $orderB = factory(Order::class)->create(['amount' => 9625]);
+        $concert->tivkets()->saveMany(factory(Ticket::class)->create(['order_id' => $orderA->id]));
+        $concert->tivkets()->saveMany(factory(Ticket::class)->create(['order_id' => $orderB->id]));
+
+        $this->assertEquals(134.75, $concert->revenueInDollars());
+        $this->assertEquals(134.75, $concert->revenueInDollars());
     }
 
     /** @test */

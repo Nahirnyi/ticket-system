@@ -34,6 +34,7 @@ $factory->define(App\Concert::class, function (FAker\Generator $faker){
        'subtitle' => 'with Animosity',
        'date' => Carbon::parse('+2 weeks'),
        'ticket_price' => 2000,
+       'ticket_quantity' => 5,
        'venue' => 'The Most Pit',
        'venue_address' => '123 Example Lane',
        'city' => 'Laravel',

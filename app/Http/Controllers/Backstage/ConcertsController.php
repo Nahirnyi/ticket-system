@@ -100,6 +100,11 @@ class ConcertsController extends Controller
             'ticket_quantity' => request('ticket_quantity'),
         ]);
 
+        if (request('published'))
+        {
+            $concert->publish();
+        }
+
         return redirect()->route('backstage.concerts.index');
     }
 }

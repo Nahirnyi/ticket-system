@@ -39,17 +39,17 @@ class SendAttendeeMessageTest extends TestCase
         OrderFactory::createPublished($concert, ['email' => 'taylor@example.com']);
 
         SendAttendeeMessage::dispatch($message);
-        Mail::assertSent(AttendeeMessageEmail::class, function ($mail) use ($message) {
+        Mail::assertQueued(AttendeeMessageEmail::class, function ($mail) use ($message) {
             return $mail->hasTo('alex@example.com')
                 && $mail->attendeeMessage->is($message);
         });
 
-        Mail::assertSent(AttendeeMessageEmail::class, function ($mail) use ($message) {
+        Mail::assertQueued(AttendeeMessageEmail::class, function ($mail) use ($message) {
             return $mail->hasTo('sam@example.com')
                 && $mail->attendeeMessage->is($message);
         });
 
-        Mail::assertSent(AttendeeMessageEmail::class, function ($mail) use ($message) {
+        Mail::assertQueued(AttendeeMessageEmail::class, function ($mail) use ($message) {
             return $mail->hasTo('taylor@example.com')
                 && $mail->attendeeMessage->is($message);
         });

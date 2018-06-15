@@ -10,6 +10,7 @@ namespace Tests\Unit;
 use App\{
     Billing\Charge, Ticket, Order
 };
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Mockery;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -54,13 +55,9 @@ class OrderTest extends  TestCase
     /** @test */
     function retrieving_a_nonexistent_order_by_confirmation_number_throws_an_exception()
     {
-        try {
-            Order::findByConfirmationNumber('ORDERCONFIRMATION1234');
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return;
-        }
+        $this->expectException(ModelNotFoundException::class);
+        Order::findByConfirmationNumber('ORDERCONFIRMATION1234');
 
-        $this->fail('No matching order was found');
     }
 
     /** @test */

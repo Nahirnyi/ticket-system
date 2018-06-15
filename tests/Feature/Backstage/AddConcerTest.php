@@ -36,7 +36,7 @@ class AddConcerTest extends TestCase
         ], $overrides);
     }
 
-    private function from($url)
+    public function from($url)
     {
         session()->setPreviousUrl(url($url));
         return $this;

@@ -97,7 +97,7 @@ class PurchaseTicketsTest extends TestCase
     private function assertValidationError($field)
     {
         $this->assertResponseStatus(422);
-        $this->assertArrayHasKey($field, $this->decodeResponseJson());
+        $this->assertArrayHasKey($field, $this->decodeResponseJson()['errors']);
     }
 
     /** @test */
@@ -224,10 +224,10 @@ class PurchaseTicketsTest extends TestCase
             'payment_token' => $this->paymentGateway->getValidTestToken(),
         ]);
 
-        /*$this->assertEquals(3600, $this->paymentGateway->totalCharges());
+        $this->assertEquals(3600, $this->paymentGateway->totalCharges());
         $this->assertTrue($concert->hasOrderFor('personA@example.com'));
         $this->assertEquals(3, $concert->ordersFor('personA@example.com')->first()->ticketQuantity());
-    */}
+    }
 
 }
 

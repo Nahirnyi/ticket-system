@@ -44,6 +44,7 @@ class ConcertsController extends Controller
             'state' => request('state'),
             'zip' => request('zip'),
             'additional_information' => request('additional_information'),
+            'poster_image_path' => request('poster_image')->store('posterts', 's3'),
         ]);
 
 

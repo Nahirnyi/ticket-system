@@ -13,8 +13,16 @@ class AttendeeMessage extends Model
         return $this->belongsTo(Concert::class);
     }
 
-    public function recipients()
+    public function withChunkedRecipients($chunk, $callback)
     {
-        return $this->concert->orders()->pluck('email');
+        $this->orders()->chunk($chunk, function ($orders) use ($callback) {
+            $callback($orders->pluck('email'));
+        });
+
+    }
+
+    public function orders()
+    {
+        return $this->concert->orders();
     }
 }

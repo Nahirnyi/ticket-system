@@ -30,6 +30,8 @@ Route::get('/login', 'Auth\LoginController@loginForm');
 
 Route::post('/logout', 'Auth\LoginController@logout');
 
+Route::get('/invitation/{code}', 'InvitationController@show')->name('invitation.show');
+
 
 Route::group(['middleware' => 'auth', 'prefix' => 'backstage', 'namespace' => 'Backstage'], function (){
     Route::get('concerts/new', 'ConcertsController@create');

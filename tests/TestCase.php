@@ -26,10 +26,6 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
             return  $this->original->getData()[$key];
         });
 
-        TestResponse::macro('assertViewIs', function ($name) {
-           Assert::assertEquals($name, $this->original->name());
-        });
-
         Collection::macro('assertContains', function ($value) {
             Assert::assertTrue($this->contains($value), "Failed asserting that the collection contained the specified value");
         });

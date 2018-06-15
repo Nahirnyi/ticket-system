@@ -1,6 +1,5 @@
 <?php
 
-use App\Concert;
 use App\Ticket;
 use App\Order;
 

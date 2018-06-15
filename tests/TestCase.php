@@ -2,9 +2,11 @@
 
 namespace Tests;
 use Exception;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Foundation\Testing\TestResponse;
 use PHPUnit\Framework\Assert;
 use Illuminate\Database\Eloquent\Collection;
+use App\Exceptions\Handler;
 
 abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
@@ -46,12 +48,17 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
 
     }
 
-    protected function disableExceptionHandler()
+    protected function disableExceptionHandling()
     {
-        app()->instance(\App\Exceptions\Handler::class, new class extends \App\Exceptions\Handler{
-            public function render($request, Exception $exception)
+        app()->instance(Handler::class, new class extends Handler {
+            public function __construct() {}
+            public function report(Exception $e)
             {
-                throw $exception;
+                // no-op
+            }
+            public function render($request, Exception $e)
+            {
+                throw $e;
             }
         });
     }

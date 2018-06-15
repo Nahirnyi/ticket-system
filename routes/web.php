@@ -14,7 +14,6 @@ Route::get('/', function (){
     return 'Laravel';
 });
 
-Route::get('/register', 'Auth\RegisterController@register')->name('auth.register');
 
 Route::post('/register', 'Auth\RegisterController@register')->name('auth.register');
 

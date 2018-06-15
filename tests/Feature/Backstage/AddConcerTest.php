@@ -324,11 +324,42 @@ class AddConcerTest extends TestCase
     }
 
     /** @test */
+    function poster_image_must_be_an_image()
+    {
+        Storage::disk('s3');
+        $user = factory(User::class)->create();
+        $file = File::create('not-a-poster.pdf');
+        $response = $this->actingAs($user)->post('/backstage/concerts', $this->validParams([
+            'poster_image' => $file,
+        ]));
+
+        $response->assertRedirect('/backstage/concerts/new');
+        $response->assertSessionHasErrors('poster_image');
+        $this->assertEquals(0, Concert::coint());
+    }
+
+    /** @test */
+    function poster_image_must_be_at_least_400px_wide()
+    {
+        Storage::disk('s3');
+        $user = factory(User::class)->create();
+        $file = File::image('poster.png', 850, 1100);
+        $response = $this->actingAs($user)->post('/backstage/concerts', $this->validParams([
+            'poster_image' => $file,
+        ]));
+
+        $response->assertRedirect('/backstage/concerts/new');
+        $response->assertSessionHasErrors('poster_image');
+        $this->assertEquals(0, Concert::count());
+    }
+
+    /** @test */
     function poster_image_is_uploaded_if_included()
     {
+        $this->disableExceptionHandling();
         Storage::fake('s3');
         $user = factory(User::class)->create();
-        $file = File::image('concer-poster.png');
+        $file = File::image('concert-poster.png');
         $response = $this->actingAs($user)->post('/backstage/concerts', $this->validParams([
             'poster_image' => $file,
         ]));

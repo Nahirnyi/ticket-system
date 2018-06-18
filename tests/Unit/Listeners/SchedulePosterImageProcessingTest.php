@@ -32,8 +32,9 @@ class SchedulePosterImageProcessingTest extends TestCase
     /** @test */
     public function a_job_is_not_queued_if_a_poster_image_is_not_present()
     {
+        $this->disableExceptionHandling();
         Queue::fake();
-        $concert = ConcertFactory::createUnpublished([
+        $concert = \ConcertFactory::createUnpublished([
             'poster_image_path' => null,
         ]);
 

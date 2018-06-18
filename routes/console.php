@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Inspiring;
 use App\Invitation;
 use App\Facades\InvitationCode;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InvitationEmail;
 /*
 |--------------------------------------------------------------------------
 | Console Routes
@@ -15,8 +17,8 @@ use App\Facades\InvitationCode;
 */
 
 Artisan::command('invate-promoter {email}', function ($email) {
-    $invitation = Invitation::create([
+    Invitation::create([
         'email' => $email,
         'code' => InvitationCode::generate(),
-    ]);
+    ])->send();
 })->describe('Invite a new promoter to create an account');

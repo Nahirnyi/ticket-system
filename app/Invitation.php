@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
 
 class Invitation extends Model
 {
@@ -21,5 +22,10 @@ class Invitation extends Model
     public function hasBeenUsed()
     {
         return $this->user_id !== null;
+    }
+
+    public function send()
+    {
+        Mail::to($this->email)->send(new Invitation($this));
     }
 }
